@@ -5,7 +5,10 @@
 #define HISTORY_MAX 144
 #define MAX_ACCEL 4000
 
+
+
 static Window *window;
+
 //static TextLayer *message_layer;
 static TextLayer *text_layer;
 static TextLayer *speed_up_layer;
@@ -27,6 +30,9 @@ static int last_x = 0;
 static AccelData history[HISTORY_MAX];
 
 static void set_timer() {
+
+
+
   if (running) timer = app_timer_register(timer_frequency, timer_callback, NULL);
 }
 
@@ -84,7 +90,7 @@ static void graph_layer_update_callback(Layer *me, GContext *ctx) {
 
   GPoint status_line1 = {last_x, 0};
   GPoint status_line2 = {last_x, frame.size.h};
-  graphics_draw_line(ctx, status_line1, status_line2);
+  //graphics_draw_line(ctx, status_line1, status_line2);
 
 }
 
@@ -100,7 +106,7 @@ static void timer_callback() {
   history[last_x].z = accel.z;
 
 if (history[last_x].z > 300) {
-  text_layer_set_text(text_layer, "hi-5 ");
+  text_layer_set_text(text_layer, "CONNECTED");
 DictionaryIterator *iter;
  app_message_outbox_begin(&iter);
  Tuplet value = TupletInteger(1, accel.z);
@@ -137,7 +143,7 @@ static void click_handler_select(ClickRecognizerRef recognizer, void *context) {
     layer_set_hidden((Layer *)text_layer, false);
     layer_set_hidden((Layer *)speed_up_layer, false);
     layer_set_hidden((Layer *)speed_down_layer, false);
-    text_layer_set_text(text_layer, "hello");
+    text_layer_set_text(text_layer, "READY");
 
     accel_data_service_unsubscribe();
 
@@ -175,7 +181,14 @@ static void handle_accel(AccelData *accel_data, uint32_t num_samples) {
 }
 
 static void window_load(Window *window) {
+
+
+
+
   Layer *window_layer = window_get_root_layer(window);
+
+
+
 
   GRect frame = window_frame = layer_get_frame(window_layer);
   graph_layer = layer_create(frame);
@@ -183,18 +196,18 @@ static void window_load(Window *window) {
   layer_add_child(window_layer, graph_layer);
 
   GRect bounds = layer_get_bounds(window_layer);
-  text_layer = text_layer_create((GRect) { .origin = { 0, bounds.size.h / 2 - 10 }, .size = { bounds.size.w, 20 } });
-  text_layer_set_text(text_layer, "hello ");
-  text_layer_set_text_alignment(text_layer, GTextAlignmentRight);
+  text_layer = text_layer_create((GRect) { .origin = { 0, bounds.size.h / 40 }, .size = { bounds.size.w, 300 } });
+  text_layer_set_text(text_layer, "READY");
+  text_layer_set_text_alignment(text_layer, GTextAlignmentCenter);
   layer_add_child(window_layer, text_layer_get_layer(text_layer));
 
   speed_up_layer = text_layer_create((GRect) { .origin = { 0, 0 }, .size = { bounds.size.w, 20 } });
-  text_layer_set_text(speed_up_layer, "speed up --->");
+  text_layer_set_text(speed_up_layer, "");
   text_layer_set_text_alignment(speed_up_layer, GTextAlignmentRight);
   layer_add_child(window_layer, text_layer_get_layer(speed_up_layer));
 
   speed_down_layer = text_layer_create((GRect) { .origin = { 0, bounds.size.h - 20 }, .size = { bounds.size.w, 20 } });
-  text_layer_set_text(speed_down_layer, "speed down --->");
+  text_layer_set_text(speed_down_layer, "");
   text_layer_set_text_alignment(speed_down_layer, GTextAlignmentRight);
   layer_add_child(window_layer, text_layer_get_layer(speed_down_layer));
 
@@ -209,10 +222,13 @@ static void window_unload(Window *window) {
 
 static void init(void) {
   window = window_create();
+
+
   app_message_register_inbox_received(in_received_handler);
  app_message_register_inbox_dropped(in_dropped_handler);
  app_message_register_outbox_sent(out_sent_handler);
  app_message_register_outbox_failed(out_failed_handler);
+
 
 
 
@@ -242,8 +258,9 @@ static void deinit(void) {
 }
 
 int main(void) {
-  init();
 
+  init();
+  
   /* APP_LOG(APP_LOG_LEVEL_DEBUG, "Done initializing, pushed window: %p", window); */
   app_event_loop();
 

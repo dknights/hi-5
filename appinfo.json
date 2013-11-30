@@ -1,8 +1,8 @@
 {
   "uuid": "7c7ddba0-0b33-43b0-8e77-1a34b72723e6",
-  "shortName": "acceleromonitor",
-  "longName": "Acceleromonitor by Seb Maynard",
-  "companyName": "seb.so",
+  "shortName": "Hi-5",
+  "longName": "Hi-5",
+  "companyName": "Hi-5",
   "versionCode": 102,
   "versionLabel": "1.0.2",
   "watchapp": {
@@ -12,6 +12,17 @@
     "dummy": 0
   },
   "resources": {
-    "media": []
+    "media": [
+     {
+        "type": "png",
+        "name": "IMAGE_OFF",
+        "file": "images/no_litter.png"
+      }]
   }
 }
+
+
+
+
+
+
